@@ -10,8 +10,8 @@ on:
 env:
   applicationfolder: spring-boot-hello-world-example
   AWS_REGION: us-east-1
-  S3BUCKET: github-aws-stack-webappdeploymentbucket-10owfycvl90iy
-  CodeGuruBucket: codeguru-reviewer-cicd-pipeline1
+  S3BUCKET: codedeploystack-webappdeploymentbucket-6pvgxkxtb8vj
+  CodeGuruBucket: codedeploystack-webappdeploymentbucket-6pvgxkxtb8vj
 
 jobs:
   build:
