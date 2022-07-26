@@ -1,16 +1,17 @@
 name: Build and Deploy
 
 on:
-   #workflow_dispatch: {}
+  #workflow_dispatch: {}
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 env:
   applicationfolder: spring-boot-hello-world-example
   AWS_REGION: us-east-1
-  S3BUCKET: codedeploystack-webappdeploymentbucket-6pvgxkxtb8vj 
-
+  S3BUCKET: github-aws-stack-webappdeploymentbucket-10owfycvl90iy
+  CodeGuruBucket: codeguru-reviewer-cicd-pipeline1
 
 jobs:
   build:
@@ -45,9 +46,33 @@ jobs:
       - name: Upload Artifact to s3
         working-directory: ${{ env.applicationfolder }}/target
         run: aws s3 cp *.war s3://${{ env.S3BUCKET }}/
-        
-  deploy:
+
+  codescan:
     needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
+          role-session-name: GitHub-Action-Role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: aws-actions/codeguru-reviewer@v1.1
+        with:
+          build_path: spring-boot-hello-world-example/target # build artifact(s) directory
+          s3_bucket: ${{ env.CodeGuruBucket }} # S3 Bucket with "codeguru-reviewer-*" prefix
+
+      - if: ${{ github.event_name != 'push' }}
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: codeguru-results.sarif.json # Your results file will be named codeguru-results.sarif.json
+
+  deploy:
+    needs: codescan
     runs-on: ubuntu-latest
     environment: Dev
     permissions:
@@ -63,4 +88,4 @@ jobs:
     - run: |
         echo "Deploying branch ${{ env.GITHUB_REF }} to ${{ github.event.inputs.environment }}"
         commit_hash=`git rev-parse HEAD`
-        aws deploy create-deployment --application-name CodeDeployAppNameWithASG --deployment-group-name CodeDeployGroupName --github-location repository=$GITHUB_REPOSITORY,commitId=$commit_hash --ignore-application-stop-failures
+        aws deploy create-deployment --application-name CodeDeployAppNameWithASG --deployment-group-name CodeDeployGroupName --github-location repository=mahbir/aws-codedeploy-github-actions-deployment,commitId=$commit_hash --ignore-application-stop-failures
