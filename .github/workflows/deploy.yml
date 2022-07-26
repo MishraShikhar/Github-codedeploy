@@ -11,7 +11,7 @@ env:
   applicationfolder: spring-boot-hello-world-example
   AWS_REGION: us-east-1
   S3BUCKET: codedeploystack-webappdeploymentbucket-6pvgxkxtb8vj
-  CodeGuruBucket: codedeploystack-webappdeploymentbucket-6pvgxkxtb8vj
+  CodeGuruBucket: codeguru-reviewer-cicd-pipeline2
 
 jobs:
   build:
