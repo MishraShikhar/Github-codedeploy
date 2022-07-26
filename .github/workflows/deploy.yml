@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-file
-          path: ${{ env.applicationfolder }}/target/*.jar
+          path: ${{ env.applicationfolder }}/target/*.war
         
       - name: Upload Artifact to s3
         working-directory: ${{ env.applicationfolder }}/target
