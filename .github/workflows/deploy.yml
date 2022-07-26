@@ -55,6 +55,11 @@ jobs:
       contents: read
 
     steps:
+    
+      - name: Build and Package Maven
+        working-directory: ${{ env.applicationfolder }}
+        run: $GITHUB_WORKSPACE/.github/scripts/build.sh
+        
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
