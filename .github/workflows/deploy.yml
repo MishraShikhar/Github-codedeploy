@@ -84,9 +84,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build project
-      if: steps.iam-role.outcome == 'success'
-      run: mvn compile -DskipTests
+    #- name: Build project
+      #if: steps.iam-role.outcome == 'success'
+      #run: mvn compile -DskipTests
 
     - name: CodeGuru Reviewer
       uses: aws-actions/codeguru-reviewer@v1.1
