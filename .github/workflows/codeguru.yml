@@ -1,4 +1,4 @@
-name: Analyze with CodeGuru Reviewer
+name: Analyze with CodeGuru Reviewer 
 
 on: 
  - push
