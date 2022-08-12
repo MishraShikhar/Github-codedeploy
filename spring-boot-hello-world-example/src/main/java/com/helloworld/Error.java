@@ -7,17 +7,17 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-public class Error {
+public class myError {
     // private constructor to avoid instantiation
-    private Error(){}
-    private static Error Error = null;
+    private myError(){}
+    private static myError myError = null;
     private static String ACCESS_KEY = "";
     private static String SECERET_KEY = "";
     static AWSCredentials aac;
     static AmazonDynamoDB ddb;
-    public synchronized static Error getInstance() {
-        if (Error == null) {
-            Error = new Credentials();
+    public synchronized static myError getInstance() {
+        if (myError == null) {
+            myError = new Credentials();
             try {
                 aac = new BasicAWSCredentials(ACCESS_KEY, SECERET_KEY);
 
@@ -28,6 +28,6 @@ public class Error {
             }
             
         }
-        return Error;
+        return myError;
     }
 }
